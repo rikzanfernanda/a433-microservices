@@ -1,0 +1,36 @@
+# Menentukan versi docker-compose yang digunakan, yaitu 3.8
+version: "3.8"
+
+# Mendefinisikan service yang akan dibuat
+services:
+  # Mendefinisikan service ke-1 yaitu item-app
+  item-app:
+    # Menggunakan image item-app yang telah di push ke github registry
+    image: ghcr.io/rikzanfernanda/a433-microservices/item-app:v1
+    # Menerapkan restart policy agar container selalu restart ketika terhenti
+    restart: always
+    # Melakukan port mapping agar dapat diakses dari port 80 di host
+    ports:
+      - 80:8080
+    # Memastikan item-app dijalankan setelah item-db
+    depends_on:
+      - item-db
+
+  # Mendefinisikan service ke-2 yaitu item-db
+  item-db:
+    # Menggunakan image mongo:3 dari Docker Hub
+    image: mongo:3
+    # Menerapkan restart policy agar container selalu restart ketika terhenti
+    restart: always
+    # Memakai volume bernama app-db dengan target /data/db di container
+    volumes:
+      - app-db:/data/db
+    # Melakukan port mapping agar dapat diakses dari port 27017 di host
+    ports:
+      - 27017:27017
+
+# Mendifinisikan volume
+volumes:
+  # Mendefinisikan volume ke-1 yaitu app-db
+  app-db:
+    name: app-db
