@@ -1,0 +1,15 @@
+apiVersion: v1  # Versi API Kubernetes yang digunakan (v1 adalah versi inti).
+kind: Service  # Jenis objek Kubernetes yang akan dibuat (Service dalam hal ini).
+
+metadata:  # Metadata untuk objek Service yang akan dibuat.
+  name: mongo  # Nama Service yang akan dibuat.
+  namespace: karsajobs-namespace  # Namespace di mana Service akan dibuat.
+  labels:  # Label yang diberikan kepada objek Service.
+    app: mongo  # Label 'app' dengan nilai 'mongo'.
+
+spec:  # Spesifikasi untuk objek Service.
+  selector:  # Selector yang akan digunakan untuk memilih pod yang akan diakses oleh Service.
+    app: mongo  # Selector memilih pod dengan label 'app' yang memiliki nilai 'mongo'.
+  ports:  # Daftar port yang akan di-expose oleh Service.
+  - port: 27017  # Port yang akan di-expose oleh Service adalah 27017.
+  clusterIP: None  # Nilai 'clusterIP' adalah 'None', yang berarti Service tidak memiliki alamat IP di dalam cluster.

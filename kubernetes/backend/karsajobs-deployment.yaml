@@ -1,0 +1,42 @@
+apiVersion: apps/v1  # Versi API yang digunakan (v1) untuk objek Deployment
+kind: Deployment  # Jenis objek yang akan dibuat, yaitu Deployment
+metadata:
+  name: karsajobs  # Nama Deployment, karsajobs
+  namespace: karsajobs-namespace  # Namespace di mana Deployment akan berada
+  labels:
+    app: backend  # Label yang ditetapkan untuk objek ini, yaitu 'app: backend'
+spec:
+  replicas: 3  # Jumlah replika (pod) yang akan dibuat oleh Deployment, dalam hal ini 3
+  selector:
+    matchLabels:
+      app: backend  # Selektor pod yang akan dipilih berdasarkan label 'app: backend'
+  template:
+    metadata:
+      labels:
+        app: backend  # Label yang akan ditetapkan untuk pod yang dibuat oleh Deployment
+    spec:
+      containers:
+      - name: karsajobs  # Nama kontainer dalam pod, 'karsajobs'
+        image: ghcr.io/rikzanfernanda/karsajobs:latest  # Image Docker yang akan digunakan
+        imagePullPolicy: IfNotPresent  # Kebijakan penarikan image, akan pull image jika tidak ada
+        resources:
+          limits:
+            cpu: "250m"  # Batas CPU yang dialokasikan untuk kontainer
+            memory: "256Mi"  # Batas memori yang dialokasikan untuk kontainer
+        ports:
+        - containerPort: 8080  # Port yang akan digunakan dalam kontainer
+        env:
+          - name: APP_PORT  # Variabel environtment dengan nama 'APP_PORT'
+            value: "8080"  # Nilai variabel environtment 'APP_PORT'
+          - name: MONGO_HOST  # Variabel environtment dengan nama 'MONGO_HOST'
+            value: mongo  # Nilai variabel environtment 'MONGO_HOST' yang mengacu pada layanan MongoDB
+          - name: MONGO_USER  # Variabel environtment dengan nama 'MONGO_USER'
+            valueFrom:
+              secretKeyRef:
+                name: mongo-secret  # Nama Secret Kubernetes yang akan digunakan
+                key: MONGO_ROOT_USERNAME  # Key di dalam Secret yang akan digunakan
+          - name: MONGO_PASS  # Variabel environtment dengan nama 'MONGO_PASS'
+            valueFrom:
+              secretKeyRef:
+                name: mongo-secret  # Nama Secret Kubernetes yang akan digunakan
+                key: MONGO_ROOT_PASSWORD  # Key di dalam Secret yang akan digunakan

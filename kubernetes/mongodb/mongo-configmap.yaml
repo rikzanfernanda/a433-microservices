@@ -1,0 +1,11 @@
+apiVersion: v1  # Versi API Kubernetes yang digunakan (v1 adalah versi inti).
+kind: ConfigMap  # Jenis objek Kubernetes yang akan dibuat (ConfigMap dalam hal ini).
+
+metadata:  # Metadata untuk objek ConfigMap yang akan dibuat.
+  name: mongo-config  # Nama ConfigMap yang akan dibuat.
+  namespace: karsajobs-namespace  # Namespace di mana ConfigMap akan dibuat.
+
+data:  # Data yang akan disimpan dalam ConfigMap.
+  mongo.conf: |  # Key 'mongo.conf' dengan nilai yang ditentukan di bawah.
+    storage:
+      dbpath: /data/db

@@ -1,0 +1,34 @@
+apiVersion: v1  # Versi API Kubernetes yang digunakan (v1 adalah versi inti).
+kind: PersistentVolume  # Jenis objek Kubernetes yang akan dibuat (PersistentVolume dalam hal ini).
+
+metadata:  # Metadata untuk objek PersistentVolume yang akan dibuat.
+  name: mongo-pv  # Nama PersistentVolume yang akan dibuat.
+  namespace: karsajobs-namespace  # Namespace di mana PersistentVolume akan dibuat.
+  labels:  # Label yang diberikan kepada objek PersistentVolume.
+    type: local  # Label 'type' dengan nilai 'local'.
+
+spec:  # Spesifikasi untuk objek PersistentVolume.
+  capacity:  # Kapasitas dari PersistentVolume.
+    storage: 1Gi  # Ukuran penyimpanan sebesar 1 GiB.
+  accessModes:  # Mode akses yang diizinkan untuk PersistentVolume.
+    - ReadWriteOnce  # Hanya satu node yang dapat membaca dan menulis pada saat yang sama.
+  persistentVolumeReclaimPolicy: Recycle  # Kebijakan untuk mengembalikan PersistentVolume setelah pemakaian.
+  storageClassName: manual  # Nama dari StorageClass yang digunakan oleh PersistentVolume.
+  hostPath:  # Path pada host (node) tempat data akan disimpan.
+    path: "/data/db"  # Path yang akan digunakan untuk penyimpanan data.
+
+---
+apiVersion: v1  # Versi API Kubernetes yang digunakan (v1 adalah versi inti).
+kind: PersistentVolumeClaim  # Jenis objek Kubernetes yang akan dibuat (PersistentVolumeClaim dalam hal ini).
+
+metadata:  # Metadata untuk objek PersistentVolumeClaim yang akan dibuat.
+  name: mongo-pv-claim  # Nama PersistentVolumeClaim yang akan dibuat.
+  namespace: karsajobs-namespace  # Namespace di mana PersistentVolumeClaim akan dibuat.
+
+spec:  # Spesifikasi untuk objek PersistentVolumeClaim.
+  storageClassName: manual  # Nama dari StorageClass yang dibutuhkan oleh PersistentVolumeClaim.
+  resources:  # Sumber daya yang diperlukan oleh PersistentVolumeClaim.
+    requests:  # Permintaan sumber daya minimum.
+      storage: 1Gi  # Permintaan ukuran penyimpanan sebesar 1 GiB.
+  accessModes:  # Mode akses yang diminta oleh PersistentVolumeClaim.
+    - ReadWriteOnce  # Permintaan untuk hanya satu node yang dapat membaca dan menulis pada saat yang sama.

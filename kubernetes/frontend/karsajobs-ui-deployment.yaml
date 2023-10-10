@@ -1,0 +1,30 @@
+apiVersion: apps/v1  # Versi API Kubernetes yang digunakan (v1 adalah versi inti).
+kind: Deployment  # Jenis objek Kubernetes yang akan dibuat (Deployment dalam hal ini).
+metadata:  # Metadata untuk objek Deployment yang akan dibuat.
+  name: karsajobs-ui  # Nama Deployment yang akan dibuat.
+  namespace: karsajobs-namespace  # Namespace di mana Deployment akan dibuat.
+  labels:  # Label yang diberikan kepada objek Deployment.
+    app: frontend  # Label 'app' dengan nilai 'frontend'.
+spec:  # Spesifikasi untuk objek Deployment.
+  replicas: 1  # Jumlah replika yang akan dibuat (1 dalam hal ini).
+  selector:  # Selektor yang akan digunakan untuk memilih pod yang akan di-manage oleh Deployment.
+    matchLabels:  # Selektor berdasarkan label.
+      app: frontend  # Selektor 'app' dengan nilai 'frontend'.
+  template:  # Template untuk pod yang akan dibuat oleh Deployment.
+    metadata:
+      labels:
+        app: frontend  # Label yang diberikan kepada pod.
+    spec:
+      containers:  # Daftar container dalam pod.
+      - name: karsajobs-ui  # Nama container.
+        image: ghcr.io/rikzanfernanda/karsajobs-ui:latest  # Image Docker yang akan digunakan.
+        imagePullPolicy: IfNotPresent  # Kebijakan pengambilan gambar (IfNotPresent: hanya ambil jika tidak ada).
+        resources:  # Pengaturan sumber daya untuk container.
+          limits:  # Batasan sumber daya maksimum.
+            memory: "1Gi"  # Batasan memori sebesar 1 GiB.
+            cpu: "750m"  # Batasan CPU sebesar 750m (milliCPU).
+        ports:  # Daftar port yang di-expose oleh container.
+        - containerPort: 8000  # Port yang di-expose oleh container (8000).
+        env:  # Variabel environtment yang akan diset dalam container.
+          - name: VUE_APP_BACKEND  # Nama variabel environtment.
+            value: http://127.0.0.1:58052  # Nilai variabel environtment.
