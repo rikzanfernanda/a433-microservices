@@ -1,0 +1,29 @@
+apiVersion: apps/v1 # versi API yang digunakan
+kind: Deployment # jenis objek yang akan dibuat (Deployment)
+metadata: # metadata terkait Deployment
+  name: order-service # nama Deployment ini
+  namespace: e-commerce # namespace di mana Deployment berjalan
+  labels: # label yang ditetapkan untuk Deployment
+    app: order-app # label "app: order-app" untuk mengidentifikasi Deployment
+spec: # spesifikasi Deployment
+  replicas: 3 # jumlah replika yang akan dibuat oleh Deployment
+  selector: # selektor untuk memilih pod yang akan dimanajemen oleh Deployment
+    matchLabels: # kriteria label untuk seleksi pod
+      app: order-app # memilih pod yang memiliki label "app: order-app"
+  template: # template pod yang akan digunakan oleh Deployment
+    metadata: # metadata pod
+      labels: # label yang ditetapkan untuk pod
+        app: order-app # label "app: order-app" untuk pod
+    spec: # spesifikasi pod
+      serviceAccountName: order-service # akun layanan yang akan digunakan oleh pod
+      containers: # daftar container dalam pod
+      - name: order-service # nama container
+        image: ghcr.io/rikzanfernanda/order-service:latest # gambar container yang akan digunakan
+        imagePullPolicy: IfNotPresent # kebijakan penarikan gambar container
+        ports: # port yang akan di-ekspos oleh container
+        - containerPort: 3000 # port 3000 akan di-ekspos
+        env: # variabel lingkungan yang didefinisikan untuk container
+          - name: PORT # variabel lingkungan "PORT"
+            value: "3000" # nilai variabel "PORT" adalah "3000"
+          - name: AMQP_URL # variabel lingkungan "AMQP_URL"
+            value: "amqp://default_user_aPU3tYmbVfbZgzmaf1j:obMUmV0YSHW9avO0NCHVdKHWhGGtETLk@127.0.0.1:15672" # nilai variabel "AMQP_URL"

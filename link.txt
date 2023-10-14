@@ -1,0 +1,5 @@
+Order service:
+https://github.com/users/rikzanfernanda/packages/container/package/order-service
+
+Shipping service:
+https://github.com/users/rikzanfernanda/packages/container/package/shipping-service

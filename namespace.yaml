@@ -1,0 +1,6 @@
+apiVersion: v1  # Versi API Kubernetes yang digunakan (v1 adalah versi inti)
+kind: Namespace  # Jenis objek Kubernetes yang akan dibuat (Namespace)
+metadata:  # Informasi metadata tentang objek Namespace yang akan dibuat
+  name: e-commerce  # Nama Namespace yang akan dibuat
+  labels:  # Label yang akan diberikan pada Namespace
+    app: e-commerce  # Label "app"

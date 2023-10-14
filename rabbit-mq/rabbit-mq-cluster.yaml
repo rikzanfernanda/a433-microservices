@@ -1,0 +1,31 @@
+apiVersion: rabbitmq.com/v1beta1 # Versi API RabbitmqCluster yang digunakan
+kind: RabbitmqCluster  # Jenis objek Kubernetes yang akan dibuat
+metadata:
+  name: rabbitmq-cluster  # Nama RabbitmqCluster
+spec:
+  replicas: 3  # Jumlah replika yang akan dibuat
+  override:
+    statefulSet:
+      spec:
+        podManagementPolicy: OrderedReady  # Kebijakan manajemen pod
+  service:
+    type: ClusterIP  # Jenis layanan Kubernetes
+  persistence:
+    storageClassName: standard  # Kelas penyimpanan yang digunakan
+    storage: 20Gi  # Ukuran penyimpanan yang dialokasikan
+  affinity:
+    podAntiAffinity:
+      requiredDuringSchedulingIgnoredDuringExecution:  # Kebijakan pod anti-affinity
+      - labelSelector:
+          matchExpressions:
+            - key: app.kubernetes.io/name
+              operator: In
+              values:
+              - rabbitmq-cluster
+        topologyKey: kubernetes.io/hostname  # Kunci topologi yang digunakan
+  rabbitmq:
+    additionalPlugins:  # Plugin tambahan RabbitMQ yang akan diaktifkan
+    - rabbitmq_federation
+    additionalConfig: |  # Konfigurasi tambahan RabbitMQ
+      disk_free_limit.absolute = 500MB
+      vm_memory_high_watermark.relative = 0.6
